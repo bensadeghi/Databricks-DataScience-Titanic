@@ -30,12 +30,13 @@
 # MAGIC   - Cleaning Data
 # MAGIC   - Delta Lake
 # MAGIC * Data Science
-# MAGIC   - Spark MLLib
+# MAGIC   - ML Workflows
+# MAGIC   - Spark MLlib
 # MAGIC   - Training and Tuning Models
 # MAGIC * Deployment
 # MAGIC   - Overview of Model Serving Tools
 # MAGIC   - Serving in Batch and Streams
-# MAGIC   - Serving via REST API (using MLFlow, AzureML & Azure Kubernetes Services)
+# MAGIC   - Serving via Web Service (AzureML & Azure Kubernetes Services)
 
 # COMMAND ----------
 
