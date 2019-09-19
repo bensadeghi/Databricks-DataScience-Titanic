@@ -79,8 +79,8 @@ print(dtc.explainParams())
 from pyspark.ml.tuning import ParamGridBuilder
 
 paramGrid = (ParamGridBuilder()
-  .addGrid(dtc.maxDepth, [2, 3, 5])
-  .addGrid(dtc.maxBins, [5, 10, 50])
+  .addGrid(dtc.maxDepth, [2, 3, 4, 5, 6])
+  .addGrid(dtc.maxBins, [10, 25, 50, 75])
   .build()
 )
 
@@ -119,7 +119,7 @@ cv = CrossValidator(
   estimatorParamMaps = paramGrid,   # Grid of parameters to try (grid search)
   evaluator=evaluator,              # Evaluator
   numFolds = 3,                     # Set k to 3
-  seed = 42                         # Seed to sure our results are the same if ran again
+  seed = 11                         # Seed to sure our results are the same if ran again
 )
 
 # COMMAND ----------
@@ -136,7 +136,9 @@ cvModel = cv.fit(trainDF)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Take a look at the scores from the different experiments.
+# MAGIC ### Take a look at the scores from the different experiments
+# MAGIC This can be done via the [MLflow](https://databricks.com/blog/2018/06/05/introducing-mlflow-an-open-source-machine-learning-platform.html) sidebar/UI, or with the code in the next cell.<br><br>
+# MAGIC ![x](https://docs.databricks.com/_images/mlflow-notebook-experiments.gif)
 
 # COMMAND ----------
 
@@ -152,6 +154,7 @@ for params, score in zip(cvModel.getEstimatorParamMaps(), cvModel.avgMetrics):
 # COMMAND ----------
 
 bestModel = cvModel.bestModel
+bestModel.stages[-1]    # decision tree model details, also can use .explainParams()
 
 # COMMAND ----------
 
@@ -167,7 +170,8 @@ bestModel = cvModel.bestModel
 
 # COMMAND ----------
 
-modelPath = "/titanic/cvPipelineModel"
+basePath = "/titanic/"
+modelPath = basePath + "cvPipelineModel"
 dbutils.fs.rm(modelPath, recurse=True)
 
 cvModel.bestModel.save(modelPath)
@@ -188,7 +192,7 @@ dbutils.fs.ls(modelPath)
 
 # COMMAND ----------
 
-predictionsPath = "/titanic/modelPredictions.parquet"
+predictionsPath = basePath + "modelPredictions"
 
 cvModel.bestModel.transform(testDF).write.mode("overwrite").parquet(predictionsPath)
 
