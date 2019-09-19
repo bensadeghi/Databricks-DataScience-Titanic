@@ -1,10 +1,5 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC ![x](https://zdnet4.cbsistatic.com/hub/i/r/2017/12/17/e9b8f576-8c65-4308-93fa-55ee47cdd7ef/resize/370xauto/30f614c5879a8589a22e57b3108195f3/databricks-logo.png)
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC # Machine Learning Workflows
 # MAGIC 
 # MAGIC Machine learning practitioners generally follow an iterative workflow.  This lesson walks through that workflow at a high level before exploring train/test splits, a baseline model, and evaluation.
