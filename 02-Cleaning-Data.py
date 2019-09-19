@@ -122,7 +122,7 @@ display(titanicCleanDF)
 
 # COMMAND ----------
 
-titanicCleanDF.write.mode("overwrite").saveAsTable("titanic_clean")
+titanicCleanDF.write.mode("overwrite").format("delta").saveAsTable("titanic_clean")
 
 # COMMAND ----------
 
