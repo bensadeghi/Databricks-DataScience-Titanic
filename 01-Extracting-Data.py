@@ -1,15 +1,5 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC ![x](https://zdnet4.cbsistatic.com/hub/i/r/2017/12/17/e9b8f576-8c65-4308-93fa-55ee47cdd7ef/resize/370xauto/30f614c5879a8589a22e57b3108195f3/databricks-logo.png)
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC &copy; 2019 Databricks, Inc. All rights reserved.<br/>
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC 
 # MAGIC # Getting access to our data
 # MAGIC 
