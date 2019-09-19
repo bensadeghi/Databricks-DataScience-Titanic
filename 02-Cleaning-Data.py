@@ -1,15 +1,5 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC ![x](https://zdnet4.cbsistatic.com/hub/i/r/2017/12/17/e9b8f576-8c65-4308-93fa-55ee47cdd7ef/resize/370xauto/30f614c5879a8589a22e57b3108195f3/databricks-logo.png)
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC &copy; 2019 Databricks, Inc. All rights reserved.<br/>
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC # Cleaning Data
 # MAGIC 
 # MAGIC In the previous notebook we have seen how we can get data into Spark Dataframes or SQL Tables, and do initial queries and visualizations on it. However, let's dive deeper into our dataset, and create a stable ETL pipeline for our end-users.
