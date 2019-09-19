@@ -159,9 +159,9 @@ bestModel.stages[-1]    # decision tree model details, also can use .explainPara
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Saving Models and Predictions
+# MAGIC ### Saving Models
 # MAGIC 
-# MAGIC Spark can save both the trained model we created as well as the predictions.  For online predictions such as on a stream of new data, saving the trained model and using it with Spark Streaming is a common application.  It's also common to retrain an algorithm as a nightly batch process and save the results to a database or parquet table for later use.
+# MAGIC Spark can save both the trained model we created as well as the predictions.  For online predictions such as on a stream of new data, saving the trained model and using it with Spark Streaming is a common application.
 
 # COMMAND ----------
 
@@ -170,8 +170,7 @@ bestModel.stages[-1]    # decision tree model details, also can use .explainPara
 
 # COMMAND ----------
 
-basePath = "/titanic/"
-modelPath = basePath + "cvPipelineModel"
+modelPath = "/titanic/cvPipelineModel"
 dbutils.fs.rm(modelPath, recurse=True)
 
 cvModel.bestModel.save(modelPath)
@@ -184,21 +183,6 @@ cvModel.bestModel.save(modelPath)
 # COMMAND ----------
 
 dbutils.fs.ls(modelPath)
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC Save predictions made on `testDF`.
-
-# COMMAND ----------
-
-predictionsPath = basePath + "modelPredictions"
-
-cvModel.bestModel.transform(testDF).write.mode("overwrite").parquet(predictionsPath)
-
-# COMMAND ----------
-
-dbutils.fs.ls(predictionsPath)
 
 # COMMAND ----------
 
