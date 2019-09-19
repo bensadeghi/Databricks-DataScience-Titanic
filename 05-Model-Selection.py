@@ -1,10 +1,5 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC ![x](https://zdnet4.cbsistatic.com/hub/i/r/2017/12/17/e9b8f576-8c65-4308-93fa-55ee47cdd7ef/resize/370xauto/30f614c5879a8589a22e57b3108195f3/databricks-logo.png)
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC # Model Selection
 # MAGIC 
 # MAGIC Building machine learning solutions involves testing a number of different models.  This lesson explores tuning hyperparameters and cross-validation in order to select the optimal model as well as saving models and predictions.
@@ -13,7 +8,7 @@
 # MAGIC * Define hyperparameters and motivate their role in machine learning
 # MAGIC * Tune hyperparameters using grid search
 # MAGIC * Validate model performance using cross-validation
-# MAGIC * Save a trained model and its predictions
+# MAGIC * Save a trained model
 
 # COMMAND ----------
 
