@@ -1,15 +1,5 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC ![x](https://zdnet4.cbsistatic.com/hub/i/r/2017/12/17/e9b8f576-8c65-4308-93fa-55ee47cdd7ef/resize/370xauto/30f614c5879a8589a22e57b3108195f3/databricks-logo.png)
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC &copy; 2019 Databricks, Inc. All rights reserved.<br/>
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC 
 # MAGIC ## Model Serving Options
 # MAGIC 
@@ -37,7 +27,7 @@
 
 # MAGIC %md
 # MAGIC 
-# MAGIC By using Databricks to create your models (or, alternatively, some of the other solutions mentioned in the previous section of our workshop), you can then choose your serving layer. Whether that's batch (where you scroll data on a regular interval), streaming (scoring data non-stop), or via REST API (where you make "random" calls to be scored), you can achieve the first 2 options using Databricks directly (or, for more complex pipelines, using scheduling via Azure Data Factory), while the latter can easily be covered by integrating Databricks with [Azure Machine Learning Service](https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-use-mlflow), for an easy way to deploy to an auto-scalable, containerized API.
+# MAGIC By using Databricks to create your models (or, alternatively, some of the other solutions mentioned in the previous section of our workshop), you can then choose your serving layer. Whether that's **batch** (where you scroll data on a regular interval), **streaming** (scoring data non-stop), or via a **web service** (where you make "random" calls to be scored), you can achieve the first 2 options using Databricks directly (or, for more complex pipelines, using scheduling via Azure Data Factory), while the latter can easily be covered by integrating Databricks with [Azure Machine Learning Service](https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-use-mlflow), for an easy way to deploy to an auto-scalable, containerized API.
 # MAGIC 
 # MAGIC See Azure Reference Architecture below:
 # MAGIC ![x](https://github.com/bensadeghi/Databricks-DataScience-Titanic/raw/master/img/azure_reference_architecture.png)
