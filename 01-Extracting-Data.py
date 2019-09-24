@@ -37,6 +37,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./Classroom-Setup
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ### Fetch Titanic Data
 
