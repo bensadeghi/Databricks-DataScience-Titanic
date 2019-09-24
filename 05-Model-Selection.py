@@ -12,6 +12,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./Classroom-Setup
+
+# COMMAND ----------
+
 # MAGIC %md-sandbox
 # MAGIC ### Tuning, Validating and Saving
 # MAGIC 
@@ -75,7 +79,6 @@ from pyspark.ml.tuning import ParamGridBuilder
 
 paramGrid = (ParamGridBuilder()
   .addGrid(dtc.maxDepth, [2, 3, 4, 5, 6])
-  .addGrid(dtc.maxBins, [10, 25, 50, 75])
   .build()
 )
 
