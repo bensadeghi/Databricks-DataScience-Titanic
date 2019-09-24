@@ -14,6 +14,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./Classroom-Setup
+
+# COMMAND ----------
+
 # MAGIC %md-sandbox
 # MAGIC ### The Development Cycle
 # MAGIC 
