@@ -42,6 +42,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./Classroom-Setup
+
+# COMMAND ----------
+
 # Load data
 
 titanicDF = spark.read.table("titanic_clean")
@@ -86,6 +90,12 @@ streamDF = spark.readStream.table("titanic_clean")
 scoredStream = pipeline.transform(streamDF)
 
 display(scoredStream)
+
+# COMMAND ----------
+
+# Stop streaming jobs
+for s in spark.streams.active:
+    s.stop()
 
 # COMMAND ----------
 
