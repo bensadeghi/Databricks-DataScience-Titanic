@@ -6,6 +6,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./Classroom-Setup
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC 
 # MAGIC We can read in the data from one of the permanent tables we created earlier.
