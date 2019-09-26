@@ -148,9 +148,9 @@ evaluator = MulticlassClassificationEvaluator(predictionCol="prediction", labelC
 
 # COMMAND ----------
 
-testError = evaluator.evaluate(testPredictionDF)
+accuracy = evaluator.evaluate(testPredictionDF)
 
-print("Accuracy on the test set for the baseline model: {}".format(testError))
+print("Accuracy on the test set for the baseline model: {}".format(accuracy))
 
 # COMMAND ----------
 
@@ -180,7 +180,7 @@ print("Accuracy on the test set for the baseline model: {}".format(testError))
 
 # COMMAND ----------
 
-from pyspark.ml.feature import StringIndexer, VectorAssembler
+from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.classification import DecisionTreeClassifier
 
 # Vectorize the features (all columns excluding the first one, Survived)
@@ -227,9 +227,9 @@ display(testPredictionDF)
 
 # COMMAND ----------
 
-testError = evaluator.evaluate(testPredictionDF)
+accuracy = evaluator.evaluate(testPredictionDF)
 
-print("Accuracy on the test set for the decision tree model: {}".format(testError))
+print("Accuracy on the test set for the decision tree model: {}".format(accuracy))
 
 # COMMAND ----------
 
