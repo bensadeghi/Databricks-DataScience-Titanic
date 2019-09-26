@@ -42,7 +42,9 @@ display(titanicDF)
 
 # COMMAND ----------
 
-titanicCleanDF = titanicDF.withColumnRenamed("Pclass", "PassengerClass").withColumnRenamed("SibSp", "SiblingsSpouses")
+titanicCleanDF = titanicDF \
+                 .withColumnRenamed("Pclass", "PassengerClass") \
+                 .withColumnRenamed("SibSp", "SiblingsSpouses")
 
 # COMMAND ----------
 
@@ -98,7 +100,7 @@ from pyspark.ml.feature import StringIndexer
 # Convert Sex and Embarked columns to index column
 indexers = [StringIndexer(inputCol=column, outputCol=column+"_index").fit(titanicCleanDF) for column in ["Sex", "Embarked"]]
 pipeline = Pipeline(stages=indexers)
-titanic_clean_df = pipeline.fit(titanicCleanDF).transform(titanicCleanDF)
+titanicCleanDF = pipeline.fit(titanicCleanDF).transform(titanicCleanDF)
 
 # Drop old Sex and Embarked columns
 titanicCleanDF = titanicCleanDF.drop("Sex").drop("Embarked")
