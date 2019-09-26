@@ -16,17 +16,11 @@
 # MAGIC %md-sandbox
 # MAGIC ## Learning from Data
 # MAGIC 
-# MAGIC Machine learning refers to a diverse set of tools for understanding data.  More technically, **machine learning is the process of _learning from data_ without being _explicitly programmed_**.  Let's unpack what that means.
+# MAGIC [Machine learning](https://en.wikipedia.org/wiki/Machine_learning) refers to a diverse set of tools for understanding data.  More technically, **machine learning is the process of _learning from data_ without being _explicitly programmed_**.  Let's unpack what that means.
 # MAGIC 
-# MAGIC Take a dataset of Boston home values in the 1970's for example.  The dataset consists of the value of homes as well as the number of rooms, crime per capita, and percent of the population considered lower class.  Home value is the _output variable_, also known as the _label_.  The other variables are known as _input variables_ or _features_.
-# MAGIC 
-# MAGIC A machine learning model would _learn_ the relationship between housing price and the various features without being explicitly programmed.  In more technical terms, our model would estimate a function `f()` that maps the relationship between input features and the output variable.
-# MAGIC 
-# MAGIC The following image shows the relation between our features and house value.  A good model `f()` would learn from the data that the number of rooms in a home is positively correlated to the house value while crime and percent of the neighborhood that is lower class is negatively correlated.  
-# MAGIC 
-# MAGIC <div><img src="https://files.training.databricks.com/images/eLearning/ML-Part-1/boston-housing.png" style="height: 400px; margin: 20px"/></div>
-# MAGIC 
-# MAGIC The lines above represent the best fit for the data where our model's best guess for a house price given a feature value on the X axis is the corresponding point on the line.
+# MAGIC <div><img src="https://images.squarespace-cdn.com/content/v1/50363cf324ac8e905e7df861/1567241163051-NHBVCU8VKRDE39PE9UQZ/ke17ZwdGBToddI8pDm48kPGprB_J7muXqFrVv-c4smgUqsxRUqqbr1mOJYKfIPR7LoDQ9mXPOjoJoqy81S2I8N_N4V1vUb5AoIIIbLZhVYxCRW4BPu10St3TBAUQYVKcIDnQgARQonPw1_f0DFweYJpL0lKJQUVzHe7UX4v0bxTsRz2rCT34JXMAKCNI0DxY/JPEG+image.jpeg" style="height: 250px; margin: 20px"/>
+# MAGIC   
+# MAGIC Take the Titanic dataset for example.  The dataset consists of the passanger details, such as sex, age, and cabin class, along with their survival status.  Here, the survival value is the _output variable_, also known as the _label_.  The other variables are known as _input variables_ or _features_.
 # MAGIC 
 # MAGIC **Machine learning is the set of approaches for estimating this function `f()` that maps features to an output.**  The inputs to this function can range from stock prices and customer information to images and DNA sequences.  Many of the same statistical techniques apply regardless of the domain.  This makes machine learning a generalizable skill set that drives decision-making in modern businesses.
 
@@ -38,8 +32,8 @@
 # MAGIC Machine learning problems are roughly categorized into two main types:<br><br>
 # MAGIC 
 # MAGIC * **Supervised learning** looks to predict the value of some outcome based on one or more input measures
-# MAGIC   - Our example of the Boston Housing Dataset is an example of supervised learning
-# MAGIC   - In this case, the output is the price of a home and the input is features such as number of rooms
+# MAGIC   - Our example of the Titanic Dataset is an example of supervised learning
+# MAGIC   - In this case, the output is the survival status and the input is passanger features, such as age and cabin class
 # MAGIC * **Unsupervised learning** describes associations and patterns in data without a known outcome
 # MAGIC   - An example of this would be clustering customer data to find the naturally occurring customer segments
 # MAGIC   - In this case, no known output is used as an input.  Instead, the goal is to discover how the data are organized into natural segments or clusters
