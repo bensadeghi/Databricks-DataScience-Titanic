@@ -58,7 +58,7 @@ trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=10)
 
 from pyspark.ml import PipelineModel
 
-modelPath = "/titanic/cvPipelineModel"
+modelPath = userName + "/titanic/cvPipelineModel"
 pipeline = PipelineModel.load(modelPath)
 
 # COMMAND ----------
@@ -120,6 +120,13 @@ for s in spark.streams.active:
 # MAGIC See the following example notebooks:
 # MAGIC - [Deploy Model to Azure Container Instance](https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/azure-databricks/amlsdk/deploy-to-aci-04.ipynb)
 # MAGIC - [Deploy Model to Azure Kubernetes Service](https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/azure-databricks/amlsdk/deploy-to-aks-existingimage-05.ipynb)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Next Step
+# MAGIC 
+# MAGIC [Delete Resources]($./07-Delete-Resources)
 
 # COMMAND ----------
 
