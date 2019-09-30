@@ -168,7 +168,7 @@ bestModel.stages[-1]    # decision tree model details, also can use .explainPara
 
 # COMMAND ----------
 
-modelPath = "/titanic/cvPipelineModel"
+modelPath = userName + "/titanic/cvPipelineModel"
 dbutils.fs.rm(modelPath, recurse=True)
 
 cvModel.bestModel.save(modelPath)
