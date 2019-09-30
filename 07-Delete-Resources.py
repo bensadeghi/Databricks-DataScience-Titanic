@@ -12,8 +12,7 @@
 # COMMAND ----------
 
 # Remove data and model files, including the created directory
-dataDir = userName + '/titanic_data'
-dbutils.fs.rm(dataDir, recurse=True)
+dbutils.fs.rm(userName, recurse=True)
 
 # COMMAND ----------
 
