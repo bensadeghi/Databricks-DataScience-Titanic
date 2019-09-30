@@ -63,20 +63,22 @@ dbutils.fs.help()
 # COMMAND ----------
 
 # Create a new directory within DBFS
-dbutils.fs.mkdirs('titanic_data')
+dataDir = userName + '/titanic_data'
+dbutils.fs.mkdirs(dataDir)
 
 # Copy data from Spark driver to DBFS
-dbutils.fs.cp('file:/databricks/driver/titanic.csv', 'dbfs:/titanic_data/titanic.csv')
+dataPath = dataDir + '/titanic.csv'
+dbutils.fs.cp('file:/databricks/driver/titanic.csv', 'dbfs:/' + dataPath)
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC 
-# MAGIC We can use **%fs** to issue filesystem commands such as **ls** to browse through our folder
+# MAGIC We can use **fs** utils to issue filesystem commands such as **ls** to browse through our folder
 
 # COMMAND ----------
 
-# MAGIC %fs ls /titanic_data
+dbutils.fs.ls(dataPath)
 
 # COMMAND ----------
 
@@ -92,15 +94,6 @@ dbutils.fs.cp('file:/databricks/driver/titanic.csv', 'dbfs:/titanic_data/titanic
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC We can use **&percnt;head ...** to view the first few lines of the file.
-
-# COMMAND ----------
-
-# MAGIC %fs head /titanic_data/titanic.csv
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC Let's start with the bare minimum by specifying that the file we want to read is delimited and the location of the file:
 # MAGIC The default delimiter for `spark.read.csv( )` is comma but we can change by specifying the option delimiter parameter.
 # MAGIC 
@@ -108,12 +101,10 @@ dbutils.fs.cp('file:/databricks/driver/titanic.csv', 'dbfs:/titanic_data/titanic
 
 # COMMAND ----------
 
-csvFile = "/titanic_data/titanic.csv"
-
 titanicDF = (spark.read           # The DataFrameReader
    .option("header", "true")       # Use first line of all files as header
    .option("inferSchema", "true")  # Automatically infer data types
-   .csv(csvFile)                   # Creates a DataFrame from CSV after reading in the file
+   .csv(dataPath)                   # Creates a DataFrame from CSV after reading in the file
    .cache()                        # Persist the data in memory
 )
 
@@ -125,16 +116,11 @@ display(titanicDF)
 
 # MAGIC %md
 # MAGIC 
-# MAGIC Alternatively, we can accomplish the same results using SQL
+# MAGIC Alternatively, we can register the DataFrame as a SQL table and run SQL commands against it
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC 
-# MAGIC DROP TABLE IF EXISTS titanic; 
-# MAGIC CREATE TABLE titanic
-# MAGIC USING CSV
-# MAGIC OPTIONS (path "/titanic_data/titanic.csv", header "true", inferSchema "true")
+titanicDF.write.mode("overwrite").format("delta").saveAsTable("titanic")
 
 # COMMAND ----------
 
