@@ -50,7 +50,7 @@
 
 titanicDF = spark.read.table("titanic_clean")
 
-trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=10)
+trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=1)
 
 # COMMAND ----------
 
@@ -58,7 +58,7 @@ trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=10)
 
 from pyspark.ml import PipelineModel
 
-modelPath = userName + "/titanic/cvPipelineModel"
+modelPath = userName + "/titanic/finalModel"
 pipeline = PipelineModel.load(modelPath)
 
 # COMMAND ----------
