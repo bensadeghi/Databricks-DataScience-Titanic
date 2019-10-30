@@ -50,21 +50,12 @@ from pyspark.ml.classification import DecisionTreeClassifier
 
 titanicDF = spark.read.table("titanic_clean")
 
-trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=10)
+trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=1)
 
 assembler = VectorAssembler(inputCols=titanicDF.columns[1:], outputCol="features")
 dtc = DecisionTreeClassifier(featuresCol="features", labelCol="Survived")
 
 pipeline = Pipeline(stages = [assembler, dtc])
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC Take a look at the model parameters using the `.explainParams()` method.
-
-# COMMAND ----------
-
-print(dtc.explainParams())
 
 # COMMAND ----------
 
@@ -151,8 +142,29 @@ for params, score in zip(cvModel.getEstimatorParamMaps(), cvModel.avgMetrics):
 
 # COMMAND ----------
 
-bestModel = cvModel.bestModel
-bestModel.stages[-1]    # decision tree model details, also can use .explainParams()
+bestModel = cvModel.bestModel.stages[-1]
+print(bestModel)
+
+# get the best value for maxDepth parameter
+bestDepth = bestModel.depth
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Build final model using the entire training dataset and evaluate its performance using the test set
+
+# COMMAND ----------
+
+dtc = DecisionTreeClassifier(featuresCol="features", labelCol="Survived", maxDepth=bestDepth)
+
+pipeline = Pipeline(stages = [assembler, dtc])
+finalModel = pipeline.fit(trainDF)
+
+# COMMAND ----------
+
+testPredictionDF = finalModel.transform(testDF)
+accuracy = evaluator.evaluate(testPredictionDF)
+print("Accuracy on the test set for the decision tree model: {}".format(accuracy))
 
 # COMMAND ----------
 
@@ -164,14 +176,14 @@ bestModel.stages[-1]    # decision tree model details, also can use .explainPara
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Save the best model.
+# MAGIC Save the final model.
 
 # COMMAND ----------
 
-modelPath = userName + "/titanic/cvPipelineModel"
+modelPath = userName + "/titanic/finalModel"
 dbutils.fs.rm(modelPath, recurse=True)
 
-cvModel.bestModel.save(modelPath)
+finalModel.save(modelPath)
 
 # COMMAND ----------
 
