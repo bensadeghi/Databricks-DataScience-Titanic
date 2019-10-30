@@ -25,7 +25,7 @@
 # MAGIC 
 # MAGIC After preparing the features in a way that the model can benefit from, the modeling stage uses those features to determine the best way to represent the data.  The various models are then evaluated and this whole process is repeated until the best solution is developed and deployed into production.
 # MAGIC 
-# MAGIC <div><img src="https://files.training.databricks.com/images/eLearning/ML-Part-1/CRISP-DM.png" style="height: 400px; margin: 20px"/></div>
+# MAGIC <div><img src="https://files.training.databricks.com/images/eLearning/ML-Part-1/CRISP-DM.png" style="height: 500px; margin:10px"/></div>
 # MAGIC 
 # MAGIC The above model addresses the high-level development cycle of data products.  This lesson addresses how to implement this at more practical level.
 # MAGIC 
@@ -71,7 +71,7 @@ display(titanicDF)
 
 # COMMAND ----------
 
-trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=10)
+trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=1)
 
 print("We have {} training examples and {} test examples.".format(trainDF.count(), testDF.count()))
 
@@ -133,7 +133,7 @@ display(testPredictionDF)
 # MAGIC %md-sandbox
 # MAGIC Define the evaluator with the prediction column, label column, and accuracy metric.
 # MAGIC 
-# MAGIC <img alt="Side Note" title="Side Note" style="vertical-align: text-bottom; position: relative; height:1.75em; top:0.05em; transform:rotate(15deg)" src="https://files.training.databricks.com/static/images/icon-note.webp"/> We'll explore various model parameters later.
+# MAGIC We'll explore various model parameters later.
 
 # COMMAND ----------
 
@@ -155,7 +155,7 @@ print("Accuracy on the test set for the baseline model: {}".format(accuracy))
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC This score indicates that the accuracy between the true survival status and the prediction of the baseline is about 58%.<br>
+# MAGIC This score indicates that the accuracy between the true survival status and the prediction of the baseline is about 54%.<br>
 # MAGIC That's not great, but it's also not too bad for a naive approach.
 
 # COMMAND ----------
