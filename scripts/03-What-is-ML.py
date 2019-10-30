@@ -2,7 +2,7 @@
 # MAGIC %md
 # MAGIC # What is Machine Learning?
 # MAGIC 
-# MAGIC Machine learning discovers patterns within data without being explicitly programmed.  This lesson introduces machine learning, explores the main topics in the field, and builds an end-to-end pipeline in Spark.
+# MAGIC Machine learning discovers patterns within data without being explicitly programmed.  This section introduces machine learning, explores the main topics in the field, and we'll continue to build an end-to-end pipeline in Spark.
 # MAGIC 
 # MAGIC #### Agenda:
 # MAGIC * Define machine learning
@@ -19,6 +19,7 @@
 # MAGIC [Machine learning](https://en.wikipedia.org/wiki/Machine_learning) refers to a diverse set of tools for understanding data.  More technically, **machine learning is the process of _learning from data_ without being _explicitly programmed_**.  Let's unpack what that means.
 # MAGIC 
 # MAGIC <div><img src="https://images.squarespace-cdn.com/content/v1/50363cf324ac8e905e7df861/1567241163051-NHBVCU8VKRDE39PE9UQZ/ke17ZwdGBToddI8pDm48kPGprB_J7muXqFrVv-c4smgUqsxRUqqbr1mOJYKfIPR7LoDQ9mXPOjoJoqy81S2I8N_N4V1vUb5AoIIIbLZhVYxCRW4BPu10St3TBAUQYVKcIDnQgARQonPw1_f0DFweYJpL0lKJQUVzHe7UX4v0bxTsRz2rCT34JXMAKCNI0DxY/JPEG+image.jpeg" style="height: 250px; margin: 20px"/>
+# MAGIC <br>Above image courtesy of François Chollet
 # MAGIC   
 # MAGIC Take the Titanic dataset for example.  The dataset consists of the passanger details, such as sex, age, and cabin class, along with their survival status.  Here, the survival value is the _output variable_, also known as the _label_.  The other variables are known as _input variables_ or _features_.
 # MAGIC 
