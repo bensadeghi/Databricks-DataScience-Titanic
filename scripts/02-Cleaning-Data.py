@@ -16,7 +16,7 @@
 
 # COMMAND ----------
 
-titanicDF = spark.table("titanic")
+titanicDF = spark.read.table("titanic")
 
 # COMMAND ----------
 
@@ -38,7 +38,7 @@ display(titanicDF)
 
 # MAGIC %md
 # MAGIC Let's rename the `Pclass` field name to `PassengerClass`, and `SibSp` to `SiblingsSpouses`
-# MAGIC Save the results in a new DataFrame called `titanic_clean_df`
+# MAGIC Save the results in a new DataFrame called `titanicCleanDF`
 
 # COMMAND ----------
 
@@ -102,12 +102,14 @@ indexers = [StringIndexer(inputCol=column, outputCol=column+"_index").fit(titani
 pipeline = Pipeline(stages=indexers)
 titanicCleanDF = pipeline.fit(titanicCleanDF).transform(titanicCleanDF)
 
-# Drop old Sex and Embarked columns
-titanicCleanDF = titanicCleanDF.drop("Sex").drop("Embarked")
-
 # COMMAND ----------
 
 display(titanicCleanDF)
+
+# COMMAND ----------
+
+# Drop old Sex and Embarked columns
+titanicCleanDF = titanicCleanDF.drop("Sex").drop("Embarked")
 
 # COMMAND ----------
 
