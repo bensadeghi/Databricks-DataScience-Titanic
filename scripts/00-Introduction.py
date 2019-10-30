@@ -1,7 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # Titanic: Machine Learning from Disaster (Kaggle)
-# MAGIC ### A basic example to illustrate the usage of PySpark ML
+# MAGIC ### A walk-through of data science basics using PySpark and the Titanic dataset
 # MAGIC 
 # MAGIC <a href="https://www.kaggle.com/c/titanic/">Titanic competition on Kaggle</a>
 
@@ -20,9 +20,9 @@
 # MAGIC   - Exploratory Analysis
 # MAGIC   - Cleaning Data
 # MAGIC * Data Science
-# MAGIC   - ML Workflows
-# MAGIC   - Spark MLlib
-# MAGIC   - Training and Tuning Models
+# MAGIC   - ML Workflow
+# MAGIC   - Training Models
+# MAGIC   - Tuning Model Parameters
 # MAGIC * Deployment
 # MAGIC   - Overview of Model Serving Options
 # MAGIC   - Serving in Batch and Streams
@@ -62,9 +62,9 @@
 # MAGIC -   ****Libraries****
 # MAGIC     -   Libraries are packages or modules that provide additional functionality that you need to solve your business problems. These may be custom written Scala or Java jars; python eggs or custom written packages. You can write and upload these manually or you may install them directly via package management utilities like pypi or maven.
 # MAGIC -   ****Tables****
-# MAGIC     -   Tables are structured data that you and your team will use for analysis. Tables can exist in several places. Tables can be stored on Amazon S3, they can be stored on the cluster that you're currently using, or they can be cached in memory. [For more about tables see the documentation](https://docs.cloud.databricks.com/docs/latest/databricks_guide/index.html#02%20Product%20Overview/07%20Tables.html).
+# MAGIC     -   Tables are structured data that you and your team will use for analysis. Tables can exist in several places. Tables can be stored on Azure Blob or Azure Data Lake Store (ADLS), they can be stored on the cluster that you're currently using, or they can be cached in memory. [For more about tables see the documentation](https://docs.cloud.databricks.com/docs/latest/databricks_guide/index.html#02%20Product%20Overview/07%20Tables.html).
 # MAGIC -   ****Clusters****
-# MAGIC     -   Clusters are groups of computers that you treat as a single computer. In Databricks, this means that you can effectively treat 20 computers as you might treat one computer. Clusters allow you to execute code from ****notebooks**** or ****libraries**** on set of data. That data may be raw data located on S3 or structured data that you uploaded as a ****table**** to the cluster you are working on. 
+# MAGIC     -   Clusters are groups of computers that you treat as a single computer. In Databricks, this means that you can effectively treat 20 computers as you might treat one computer. Clusters allow you to execute code from ****notebooks**** or ****libraries**** on set of data. That data may be raw data located on Blob/ADLS or structured data that you uploaded as a ****table**** to the cluster you are working on. 
 # MAGIC     - It is important to note that clusters have access controls to control who has access to each cluster.
 # MAGIC     -   Here is a demonstration video of [Clusters](http://www.youtube.com/embed/2-imke2vDs8).
 # MAGIC -   ****Jobs****
@@ -187,8 +187,7 @@
 # MAGIC 
 # MAGIC ####Performance advantages:
 # MAGIC 
-# MAGIC * Up to 5x faster than Vanilla Spark over AWS
-# MAGIC * Databricks IO Cache vs classic RDD cache
+# MAGIC * Up to 5x faster than Vanilla Spark
 # MAGIC * Seamless integration with Azure ecosystem
 # MAGIC 
 # MAGIC ![AzureDatabricks-benchmarking](https://nachochurndata.blob.core.windows.net/images/Picture1.png)
