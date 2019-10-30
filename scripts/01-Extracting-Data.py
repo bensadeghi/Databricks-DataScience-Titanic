@@ -25,7 +25,7 @@
 # MAGIC Please ensure you have a cluster with the following configuration:
 # MAGIC 
 # MAGIC Cluster Mode: Standard  
-# MAGIC Databricks Runtime: 5.4+ ML  
+# MAGIC Databricks Runtime: 5.4+  
 # MAGIC NO autoscaling  
 # MAGIC Standard VMs (DS3 v2)  
 # MAGIC 1 worker node
@@ -34,6 +34,8 @@
 
 # MAGIC %md
 # MAGIC **IMPORTANT** If you are using a shared workspace, please be careful whenever writing files or creating tables. These will be shared across your instance, so please add a prefix/suffix to your tables/file names on write, and, whenever reading, make sure you propagate the changes.
+# MAGIC 
+# MAGIC The execution (%run) of the Classroom-Setup notebook below will create you an isolated database.
 
 # COMMAND ----------
 
@@ -96,56 +98,19 @@ dbutils.fs.ls(dataPath)
 # MAGIC %md
 # MAGIC Let's start with the bare minimum by specifying that the file we want to read is delimited and the location of the file:
 # MAGIC The default delimiter for `spark.read.csv( )` is comma but we can change by specifying the option delimiter parameter.
-# MAGIC 
-# MAGIC For the purpose of the workshop, we will be reading samples of the files, as to not spend too many resources from our Azure Pass. If you're using your own, bigger clusters, feel free to use the full data files (just remove _sample_ from the name).
 
 # COMMAND ----------
 
-titanicDF = (spark.read           # The DataFrameReader
+titanicDF = (spark.read            # The DataFrameReader
    .option("header", "true")       # Use first line of all files as header
    .option("inferSchema", "true")  # Automatically infer data types
-   .csv(dataPath)                   # Creates a DataFrame from CSV after reading in the file
+   .csv(dataPath)                  # Creates a DataFrame from CSV after reading in the file
    .cache()                        # Persist the data in memory
 )
 
 # COMMAND ----------
 
 display(titanicDF)
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC 
-# MAGIC Alternatively, we can register the DataFrame as a SQL table and run SQL commands against it
-
-# COMMAND ----------
-
-titanicDF.write.mode("overwrite").format("delta").saveAsTable("titanic")
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC 
-# MAGIC SELECT * FROM titanic LIMIT 10
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC 
-# MAGIC This time we are going to read the same file.
-# MAGIC 
-# MAGIC The difference here is that we are going to define the schema beforehand to avoid the execution of any extra jobs.
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ### Inferred Schema
-
-# COMMAND ----------
-
-# What is the current schema inferred?
-
-titanicDF.printSchema()
 
 # COMMAND ----------
 
@@ -213,6 +178,33 @@ titanicDF.printSchema()
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC 
+# MAGIC Alternatively, we can register the DataFrame as a SQL table and run SQL commands against it
+
+# COMMAND ----------
+
+titanicDF.write.mode("overwrite").format("delta").saveAsTable("titanic")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC 
+# MAGIC SELECT * FROM titanic LIMIT 10
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Inferred Schema
+
+# COMMAND ----------
+
+# What is the current schema inferred?
+
+titanicDF.printSchema()
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ### Summary of Data
 
 # COMMAND ----------
@@ -249,9 +241,10 @@ display(titanicDF.groupBy('Survived', 'Sex').count())
 
 # COMMAND ----------
 
-## Checking survival rate using feature Passanger Class 
-
-display(titanicDF.groupBy('Survived', 'Pclass').count())
+# MAGIC %sql
+# MAGIC -- Checking survival rate using feature Passanger Class 
+# MAGIC 
+# MAGIC SELECT Survived, Pclass, COUNT(*) FROM titanic GROUP BY Survived, Pclass
 
 # COMMAND ----------
 
