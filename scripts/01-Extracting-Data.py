@@ -244,7 +244,7 @@ display(titanicDF.groupBy('Survived', 'Sex').count())
 # MAGIC %sql
 # MAGIC -- Checking survival rate using feature Passanger Class 
 # MAGIC 
-# MAGIC SELECT Survived, Pclass, COUNT(*) FROM titanic GROUP BY Survived, Pclass
+# MAGIC SELECT Survived, Pclass, COUNT(*) FROM titanic GROUP BY Survived, Pclass ORDER BY Pclass
 
 # COMMAND ----------
 
