@@ -12,6 +12,11 @@
 
 # COMMAND ----------
 
+dbutils.library.installPyPI("mlflow")
+dbutils.library.restartPython()
+
+# COMMAND ----------
+
 # MAGIC %run ./Classroom-Setup
 
 # COMMAND ----------
