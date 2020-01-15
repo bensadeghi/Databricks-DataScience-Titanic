@@ -106,7 +106,7 @@ for s in spark.streams.active:
 
 # MAGIC %md
 # MAGIC 
-# MAGIC **Azure Machine Learning** provides the following [MLOps capabilities](https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-deploy-and-where):<br><br>
+# MAGIC **Azure Machine Learning** provides the following [MLOps capabilities](https://docs.microsoft.com/en-us/azure/machine-learning/concept-model-management-and-deployment):<br><br>
 # MAGIC - Deploy ML projects from anywhere
 # MAGIC - Monitor ML applications for operational and ML related issues - compare model inputs between training and inference, explore model-specific metrics and provide monitoring and alerts on your ML infrastructure.
 # MAGIC - Capture the data required for establishing an end to end audit trail of the ML lifecycle, including who is publishing models, why changes are being made, and when models were deployed or used in production.
@@ -119,7 +119,7 @@ for s in spark.streams.active:
 # MAGIC %md
 # MAGIC See the following example notebooks:
 # MAGIC - [Deploy Model to Azure Container Instance](https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/azure-databricks/amlsdk/deploy-to-aci-04.ipynb)
-# MAGIC - [Deploy Model to Azure Kubernetes Service](https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/azure-databricks/amlsdk/deploy-to-aks-existingimage-05.ipynb)
+# MAGIC - [Deploy Model to Azure Kubernetes Service](https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/azure-databricks/amlsdk/deploy-to-aks-05.ipynb)
 
 # COMMAND ----------
 
