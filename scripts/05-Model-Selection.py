@@ -12,6 +12,11 @@
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC Install [mlflow](https://mlflow.org/) package to be used for model tracking in this notebook.
+
+# COMMAND ----------
+
 dbutils.library.installPyPI("mlflow")
 dbutils.library.restartPython()
 
