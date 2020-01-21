@@ -85,15 +85,6 @@ paramGrid = (ParamGridBuilder()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Now `paramGrid` contains all of the combinations we will test in the next step.  Take a look at what it contains.
-
-# COMMAND ----------
-
-paramGrid
-
-# COMMAND ----------
-
 # MAGIC %md-sandbox
 # MAGIC ### Cross-Validation
 # MAGIC 
