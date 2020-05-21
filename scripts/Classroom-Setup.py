@@ -1,8 +1,8 @@
 # Databricks notebook source
 import re
 # Get user name
-userName = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().apply('user')
-userName = re.sub(r"[^a-zA-Z0-9]", "_", userName)
+user = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().apply('user')
+userName = re.sub(r"[^a-zA-Z0-9]", "_", user)
 # Create database name
 databaseName = userName + "_db"
 # Create database
