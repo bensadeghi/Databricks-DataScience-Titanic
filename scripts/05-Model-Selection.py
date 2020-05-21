@@ -174,15 +174,20 @@ with mlflow.start_run(run_name="final_model") as run:
 # MAGIC 
 # MAGIC #### Create a new registered model using the API
 # MAGIC 
-# MAGIC The following cells use the `mlflow.register_model()` function to create a new registered model whose name begins with the string `pTitanic-DecisionTree`. This also creates a new model version (e.g., `Version 1` of `Titanic-DecisionTree`).
+# MAGIC The following cells use the `mlflow.register_model()` function to create a new registered model whose name begins with the string `Titanic-DecisionTree`. This also creates a new model version (e.g., `Version 1` of `Titanic-DecisionTree`).
 
 # COMMAND ----------
 
 from mlflow.tracking.client import MlflowClient
 client = MlflowClient()
 
-modelName = "Titanic-DecisionTree"
+modelName = "Titanic-Model__" + userName
 modelPath = artifactURI + "/model"
+
+try:
+  client.create_registered_model(modelName)
+except:
+  pass
 
 modelDetails = client.create_model_version(
     name   = modelName,
