@@ -123,6 +123,33 @@
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC ### Tracking Experiments with [MLflow](https://mlflow.org/)
+# MAGIC 
+# MAGIC MLflow Tracking is...<br><br>
+# MAGIC 
+# MAGIC * a logging API specific for machine learning 
+# MAGIC * agnostic to libraries and environments that do the training
+# MAGIC * organized around the concept of **runs**, which are executions of data science code
+# MAGIC * runs are aggregated into **experiments** where many runs can be a part of a given experiment 
+# MAGIC * An MLflow server can host many experiments
+# MAGIC 
+# MAGIC Each run can record the following information:<br><br>
+# MAGIC 
+# MAGIC - **Parameters:** Key-value pairs of input parameters such as the number of trees in a random forest model
+# MAGIC - **Metrics:** Evaluation metrics such as RMSE or Area Under the ROC Curve
+# MAGIC - **Artifacts:** Arbitrary output files in any format.  This can include images, pickled models, and data files
+# MAGIC - **Source:** The code that originally ran the experiment
+# MAGIC 
+# MAGIC Experiments can be tracked using libraries in Python, R, and Java as well as by using the CLI and REST calls
+
+# COMMAND ----------
+
+# MAGIC %md-sandbox
+# MAGIC <div><img src="https://files.training.databricks.com/images/eLearning/ML-Part-4/mlflow-tracking.png" style="height: 300px; margin: 20px"/></div>
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ## Next Step
 # MAGIC 
 # MAGIC [ML Workflows]($./04-ML-Workflows)
