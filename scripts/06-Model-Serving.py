@@ -45,7 +45,7 @@
 from mlflow.tracking.client import MlflowClient
 client = MlflowClient()
 
-modelName = "Titanic-DecisionTree"
+modelName = "Titanic-Model__" + userName
 latestVersionInfo = client.get_latest_versions(modelName, stages=["Production"])
 latestVersion = latestVersionInfo[0].version
 print("The latest production version of the model '%s' is '%s'." % (modelName, latestVersion))
