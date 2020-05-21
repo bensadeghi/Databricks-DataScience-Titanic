@@ -34,15 +34,44 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./Classroom-Setup
+
+# COMMAND ----------
+
+# MAGIC %md ## Load versions of the registered model
+
+# COMMAND ----------
+
+from mlflow.tracking.client import MlflowClient
+client = MlflowClient()
+
+modelName = "Titanic-DecisionTree"
+latestVersionInfo = client.get_latest_versions(modelName, stages=["Production"])
+latestVersion = latestVersionInfo[0].version
+print("The latest production version of the model '%s' is '%s'." % (modelName, latestVersion))
+
+# COMMAND ----------
+
+# MAGIC %md You can also load a specific model stage. The following cell loads the `Production` stage of the model.
+# MAGIC 
+# MAGIC The following cell uses the `mlflow.pyfunc.load_model()` API to load the latest version of production stage model as a generic Python function.
+
+# COMMAND ----------
+
+import mlflow.pyfunc
+
+modelURI = "models:/{model_name}/production".format(model_name=modelName)
+
+print("Loading registered model version from URI: '{model_uri}'".format(model_uri=modelURI))
+modelPipeline = mlflow.pyfunc.load_model(modelURI).spark_model
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ## Batch Scoring
 # MAGIC The most common way of using Data Science models today is by using a batch scoring system. For example, let's say you have implemented a churn system, and every morning you'd like one of your colleagues to go through a list of the top 5 most likely to churn customers, and ring them up. In the backend, that usually means that, the evening before, after the day's data has been collected, a ML model runs on the new information to produce a list of 5 likely churners.
 # MAGIC 
 # MAGIC In our case, we'd like to run our model once against our test dataset and prediction survival status.
-
-# COMMAND ----------
-
-# MAGIC %run ./Classroom-Setup
 
 # COMMAND ----------
 
@@ -54,18 +83,9 @@ trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=1)
 
 # COMMAND ----------
 
-# Load model
-
-from pyspark.ml import PipelineModel
-
-modelPath = userName + "/titanic/finalModel"
-pipeline = PipelineModel.load(modelPath)
-
-# COMMAND ----------
-
 # Make predictions in batch
 
-predictions = pipeline.transform(testDF)
+predictions = modelPipeline.transform(testDF)
 
 display(predictions)
 
@@ -85,9 +105,9 @@ streamDF = spark.readStream.table("titanic_clean")
 
 # COMMAND ----------
 
-# Make predictions on streaming data
+# Make real-time predictions on streaming data
 
-scoredStream = pipeline.transform(streamDF)
+scoredStream = modelPipeline.transform(streamDF)
 
 display(scoredStream)
 
@@ -117,9 +137,11 @@ for s in spark.streams.active:
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC See the following example notebooks:
-# MAGIC - [Deploy Model to Azure Container Instance](https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/azure-databricks/amlsdk/deploy-to-aci-04.ipynb)
-# MAGIC - [Deploy Model to Azure Kubernetes Service](https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/azure-databricks/amlsdk/deploy-to-aks-05.ipynb)
+# MAGIC ## Additional Resources
+# MAGIC - [MLflow Guide](https://docs.microsoft.com/en-us/azure/databricks/applications/mlflow/)
+# MAGIC - [Track models metrics with MLflow and Azure Machine Learning](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-use-mlflow)
+# MAGIC - [Notebook: Deploy Model to Azure Container Instance](https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/azure-databricks/amlsdk/deploy-to-aci-04.ipynb)
+# MAGIC - [mlflow.azureml API](https://www.mlflow.org/docs/latest/python_api/mlflow.azureml.html)
 
 # COMMAND ----------
 
