@@ -6,7 +6,8 @@
 # MAGIC 
 # MAGIC #### Agenda:
 # MAGIC * Define the data analytics development cycle
-# MAGIC * Motivate and perform a split between training and test data
+# MAGIC * Perform a split between training and test data
+# MAGIC * Track model development with MLflow
 # MAGIC * Train a baseline model
 # MAGIC * Evaluate a baseline model's performance
 # MAGIC * Train a decision tree
@@ -54,7 +55,7 @@
 
 # COMMAND ----------
 
-titanicDF = spark.read.table("titanic_clean")
+titanicDF = spark.read.table("titanic_clean").cache()
 
 display(titanicDF)
 
@@ -148,9 +149,16 @@ evaluator = MulticlassClassificationEvaluator(predictionCol="prediction", labelC
 
 # COMMAND ----------
 
-accuracy = evaluator.evaluate(testPredictionDF)
+import mlflow
 
-print("Accuracy on the test set for the baseline model: {}".format(accuracy))
+with mlflow.start_run(run_name="baseline_model"):
+  # Log the dummy model parameter value
+  mlflow.log_param("maxDepth", 0)
+  
+  # Log corresponding model accuracy
+  accuracy = evaluator.evaluate(testPredictionDF)
+  mlflow.log_metric("accuracy", accuracy)
+  print("Accuracy on the test set for the baseline model: {}".format(accuracy))
 
 # COMMAND ----------
 
@@ -180,6 +188,7 @@ print("Accuracy on the test set for the baseline model: {}".format(accuracy))
 
 # COMMAND ----------
 
+import mlflow.spark
 from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.classification import DecisionTreeClassifier
 
@@ -188,9 +197,19 @@ features = trainDF.columns[1:]
 assembler = VectorAssembler(inputCols=features, outputCol="features")
 assembledTrainDF = assembler.transform(trainDF)
 
-# Train a decision tree, setting maxDepth parameter to 3
-dtc = DecisionTreeClassifier(featuresCol="features", labelCol="Survived", maxDepth=2)
+# Start new MLflow run
+mlflow.start_run(run_name="shallow_tree")
+
+# Set decision tree `maxDepth` parameter to 2, logging with MLflow
+maxDepth = 2
+mlflow.log_param("maxDepth", maxDepth)
+
+# Train a decision tree
+dtc = DecisionTreeClassifier(featuresCol="features", labelCol="Survived", maxDepth=maxDepth)
+
+# Log and save model as an MLflow artifact
 dtcModel = dtc.fit(assembledTrainDF)
+mlflow.spark.log_model(dtcModel, "model")
 
 # Print the constructed tree
 print(dtcModel.toDebugString)
@@ -227,9 +246,12 @@ display(testPredictionDF)
 
 # COMMAND ----------
 
+# Generation accuracy metric and log it in MLflow
 accuracy = evaluator.evaluate(testPredictionDF)
-
+mlflow.log_metric("accuracy", accuracy)
 print("Accuracy on the test set for the decision tree model: {}".format(accuracy))
+
+mlflow.end_run()
 
 # COMMAND ----------
 
