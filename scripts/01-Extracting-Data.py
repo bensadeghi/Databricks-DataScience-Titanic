@@ -13,8 +13,8 @@
 # MAGIC DBFS allows you to mount containers so that you can seamlessly access data without requiring credentials.
 # MAGIC 
 # MAGIC **Databricks Mount Points:**
-# MAGIC - Connect to our Azure Storage Account - https://docs.azuredatabricks.net/spark/latest/data-sources/azure/azure-storage.html
-# MAGIC - Connect to our Azure Data Lake - https://docs.azuredatabricks.net/spark/latest/data-sources/azure/azure-datalake.html
+# MAGIC - [Connect to our Azure Storage Account](https://docs.azuredatabricks.net/spark/latest/data-sources/azure/azure-storage.html)
+# MAGIC - [Connect to our Azure Data Lake](https://docs.microsoft.com/en-us/azure/databricks/data/data-sources/azure/azure-datalake-gen2)
 
 # COMMAND ----------
 
@@ -29,6 +29,8 @@
 # MAGIC NO autoscaling  
 # MAGIC Standard VMs (DS3 v2)  
 # MAGIC 1 worker node
+# MAGIC 
+# MAGIC Install **MLflow** library on the cluster via PyPI
 
 # COMMAND ----------
 
