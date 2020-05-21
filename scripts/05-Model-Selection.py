@@ -5,20 +5,11 @@
 # MAGIC Building machine learning solutions involves testing a number of different models.  This lesson explores tuning hyperparameters and cross-validation in order to select the optimal model as well as saving models and predictions.
 # MAGIC 
 # MAGIC ### Agenda:
+# MAGIC * Use MLflow to manage the model lifecycle
 # MAGIC * Define hyperparameters and motivate their role in machine learning
 # MAGIC * Tune hyperparameters using grid search
 # MAGIC * Validate model performance using cross-validation
 # MAGIC * Save a trained model
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC Install [mlflow](https://mlflow.org/) package to be used for model tracking in this notebook.
-
-# COMMAND ----------
-
-dbutils.library.installPyPI("mlflow")
-dbutils.library.restartPython()
 
 # COMMAND ----------
 
@@ -58,7 +49,7 @@ from pyspark.ml import Pipeline
 from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.classification import DecisionTreeClassifier
 
-titanicDF = spark.read.table("titanic_clean")
+titanicDF = spark.read.table("titanic_clean").cache()
 
 trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=1)
 
@@ -80,6 +71,7 @@ from pyspark.ml.tuning import ParamGridBuilder
 
 paramGrid = (ParamGridBuilder()
   .addGrid(dtc.maxDepth, [2, 3, 4, 5, 6])
+  .addGrid(dtc.maxBins, [10, 25, 50, 75])
   .build()
 )
 
@@ -107,9 +99,9 @@ evaluator = MulticlassClassificationEvaluator(predictionCol="prediction", labelC
 cv = CrossValidator(
   estimator = pipeline,             # Estimator (individual model or pipeline)
   estimatorParamMaps = paramGrid,   # Grid of parameters to try (grid search)
-  evaluator=evaluator,              # Evaluator
-  numFolds = 3,                     # Set k to 3
-  seed = 11                         # Seed to sure our results are the same if ran again
+  evaluator = evaluator,              # Evaluator
+  numFolds = 5,                     # Set k to 5
+  seed = 10                         # Seed to sure our results are the same if ran again
 )
 
 # COMMAND ----------
@@ -132,12 +124,6 @@ cvModel = cv.fit(trainDF)
 
 # COMMAND ----------
 
-for params, score in zip(cvModel.getEstimatorParamMaps(), cvModel.avgMetrics):
-  print("".join([param.name+"\t"+str(params[param])+"\t" for param in params]))
-  print("\tScore: {}".format(score))
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC You can then access the best model using the `.bestModel` attribute.
 
@@ -147,53 +133,112 @@ bestModel = cvModel.bestModel.stages[-1]
 print(bestModel)
 
 # get the best value for maxDepth parameter
-bestDepth = bestModel.depth
+bestDepth = bestModel.getOrDefault("maxDepth")
+bestBins = bestModel.getOrDefault("maxBins")
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC Build final model using the entire training dataset and evaluate its performance using the test set
-
-# COMMAND ----------
-
-dtc = DecisionTreeClassifier(featuresCol="features", labelCol="Survived", maxDepth=bestDepth)
-
-pipeline = Pipeline(stages = [assembler, dtc])
-finalModel = pipeline.fit(trainDF)
-
-# COMMAND ----------
-
-testPredictionDF = finalModel.transform(testDF)
-accuracy = evaluator.evaluate(testPredictionDF)
-print("Accuracy on the test set for the decision tree model: {}".format(accuracy))
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ### Saving Models
 # MAGIC 
-# MAGIC Spark can save both the trained model we created as well as the predictions.  For online predictions such as on a stream of new data, saving the trained model and using it with Spark Streaming is a common application.
+# MAGIC Log parameters, metrics, and the model iteself in MLflow
+
+# COMMAND ----------
+
+import mlflow.spark
+
+with mlflow.start_run(run_name="final_model") as run:
+  runID = run.info.run_uuid
+  artifactURI = run.info.artifact_uri
+  
+  # train model
+  dtc = DecisionTreeClassifier(featuresCol="features", labelCol="Survived", maxDepth=bestDepth, maxBins=bestBins)
+  pipeline = Pipeline(stages = [assembler, dtc])
+  finalModel = pipeline.fit(trainDF)
+  
+  # log parameters and model
+  mlflow.log_param("maxDepth", bestDepth)
+  mlflow.log_param("maxBins", bestBins)
+  mlflow.spark.log_model(finalModel, "model")
+  
+  # generate and log metrics
+  testPredictionDF = finalModel.transform(testDF)
+  accuracy = evaluator.evaluate(testPredictionDF)
+  mlflow.log_metric("accuracy", accuracy)
+  print("Accuracy on the test set for the decision tree model: {}".format(accuracy))
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Save the final model.
+# MAGIC ### Register Model
+# MAGIC 
+# MAGIC #### Create a new registered model using the API
+# MAGIC 
+# MAGIC The following cells use the `mlflow.register_model()` function to create a new registered model whose name begins with the string `pTitanic-DecisionTree`. This also creates a new model version (e.g., `Version 1` of `Titanic-DecisionTree`).
 
 # COMMAND ----------
 
-modelPath = userName + "/titanic/finalModel"
-dbutils.fs.rm(modelPath, recurse=True)
+from mlflow.tracking.client import MlflowClient
+client = MlflowClient()
 
-finalModel.save(modelPath)
+modelName = "Titanic-DecisionTree"
+modelPath = artifactURI + "/model"
+
+modelDetails = client.create_model_version(
+    name   = modelName,
+    source = modelPath,
+    run_id = runID)
+
+print(modelDetails)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Take a look at where it saved.
+# MAGIC %md After creating a model version, it may take a short period of time to become ready. Certain operations, such as model stage transitions, require the model to be in the `READY` state. Other operations, such as adding a description or fetching model details, can be performed before the model version is ready (e.g., while it is in the `PENDING_REGISTRATION` state).
+# MAGIC 
+# MAGIC The following cell uses the `MlflowClient.get_model_version()` function to wait until the model is ready.
 
 # COMMAND ----------
 
-dbutils.fs.ls(modelPath)
+import time
+from mlflow.entities.model_registry.model_version_status import ModelVersionStatus
+
+def wait_until_ready(model_name, model_version):
+  for _ in range(10):
+    model_version_details = client.get_model_version(
+      name=model_name,
+      version=model_version,
+    )
+    status = ModelVersionStatus.from_string(model_version_details.status)
+    print("Model status: %s" % ModelVersionStatus.to_string(status))
+    if status == ModelVersionStatus.READY:
+      break
+    time.sleep(1)
+  
+wait_until_ready(modelDetails.name, modelDetails.version)
+
+# COMMAND ----------
+
+# MAGIC %md ### Perform a model stage transition
+# MAGIC 
+# MAGIC The MLflow Model Registry defines several model stages: **None**, **Staging**, **Production**, and **Archived**. Each stage has a unique meaning. For example, **Staging** is meant for model testing, while **Production** is for models that have completed the testing or review processes and have been deployed to applications.
+
+# COMMAND ----------
+
+client.transition_model_version_stage(
+  name = modelDetails.name,
+  version = modelDetails.version,
+  stage='Production',
+)
+
+# COMMAND ----------
+
+# MAGIC %md The MLflow Model Registry allows multiple model versions to share the same stage. When referencing a model by stage, the Model Registry will use the latest model version (the model version with the largest version ID). The `MlflowClient.get_latest_versions()` function fetches the latest model version for a given stage or set of stages. The following cell uses this function to print the latest version of the power forecasting model that is in the `Production` stage.
+
+# COMMAND ----------
+
+latestVersionInfo = client.get_latest_versions(modelName, stages=["Production"])
+latestVersion = latestVersionInfo[0].version
+print("The latest production version of the model '%s' is '%s'." % (modelName, latestVersion))
 
 # COMMAND ----------
 
