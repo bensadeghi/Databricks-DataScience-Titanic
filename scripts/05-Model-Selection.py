@@ -119,7 +119,7 @@ cvModel = cv.fit(trainDF)
 
 # MAGIC %md
 # MAGIC ### Take a look at the scores from the different experiments
-# MAGIC This can be done via the [MLflow](https://databricks.com/blog/2018/06/05/introducing-mlflow-an-open-source-machine-learning-platform.html) sidebar/UI, or with the code in the next cell.<br><br>
+# MAGIC This can be done via the [MLflow](https://databricks.com/blog/2018/06/05/introducing-mlflow-an-open-source-machine-learning-platform.html) sidebar/UI<br><br>
 # MAGIC ![x](https://docs.databricks.com/_images/mlflow-notebook-experiments.gif)
 
 # COMMAND ----------
@@ -149,7 +149,6 @@ import mlflow.spark
 
 with mlflow.start_run(run_name="final_model") as run:
   runID = run.info.run_uuid
-  artifactURI = run.info.artifact_uri
   
   # train model
   dtc = DecisionTreeClassifier(featuresCol="features", labelCol="Survived", maxDepth=bestDepth, maxBins=bestBins)
@@ -174,27 +173,16 @@ with mlflow.start_run(run_name="final_model") as run:
 # MAGIC 
 # MAGIC #### Create a new registered model using the API
 # MAGIC 
-# MAGIC The following cells use the `mlflow.register_model()` function to create a new registered model whose name begins with the string `Titanic-DecisionTree`. This also creates a new model version (e.g., `Version 1` of `Titanic-DecisionTree`).
+# MAGIC The following cells use the `mlflow.register_model()` function to create a new registered model whose name begins with the string `Titanic-DecisionTree`. This also creates a new model version (e.g., `Version 1` of `Titanic-Model`).
 
 # COMMAND ----------
 
-from mlflow.tracking.client import MlflowClient
-client = MlflowClient()
-
 modelName = "Titanic-Model__" + userName
-modelPath = artifactURI + "/model"
 
-try:
-  client.create_registered_model(modelName)
-except:
-  pass
+artifactPath = "model"
+modelURI = "runs:/{run_id}/{artifact_path}".format(run_id=runID, artifact_path=artifactPath)
 
-modelDetails = client.create_model_version(
-    name   = modelName,
-    source = modelPath,
-    run_id = runID)
-
-print(modelDetails)
+modelDetails = mlflow.register_model(model_uri=modelURI, name=modelName)
 
 # COMMAND ----------
 
@@ -206,6 +194,8 @@ print(modelDetails)
 
 import time
 from mlflow.entities.model_registry.model_version_status import ModelVersionStatus
+from mlflow.tracking.client import MlflowClient
+client = MlflowClient()
 
 def wait_until_ready(model_name, model_version):
   for _ in range(10):
