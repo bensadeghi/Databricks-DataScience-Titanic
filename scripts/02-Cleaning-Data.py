@@ -16,7 +16,7 @@
 
 # COMMAND ----------
 
-titanicDF = spark.read.table("titanic")
+titanicDF = spark.read.table("titanic").cache()
 
 # COMMAND ----------
 
