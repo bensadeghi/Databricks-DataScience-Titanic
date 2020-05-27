@@ -72,7 +72,7 @@ display(titanicDF)
 
 # COMMAND ----------
 
-trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=1)
+trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=10)
 
 print("We have {} training examples and {} test examples.".format(trainDF.count(), testDF.count()))
 
