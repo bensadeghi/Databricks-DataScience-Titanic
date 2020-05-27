@@ -67,12 +67,12 @@ dbutils.fs.help()
 # COMMAND ----------
 
 # Create a new directory within DBFS
-dataDir = userName + '/titanic_data'
+dataDir = 'dbfs:/' + userName + '/titanic_data'
 dbutils.fs.mkdirs(dataDir)
 
 # Copy data from Spark driver to DBFS
 dataPath = dataDir + '/titanic.csv'
-dbutils.fs.cp('file:/databricks/driver/titanic.csv', 'dbfs:/' + dataPath)
+dbutils.fs.cp('file:/databricks/driver/titanic.csv', dataPath)
 
 # COMMAND ----------
 
