@@ -51,7 +51,7 @@ from pyspark.ml.classification import DecisionTreeClassifier
 
 titanicDF = spark.read.table("titanic_clean").cache()
 
-trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=1)
+trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=10)
 
 assembler = VectorAssembler(inputCols=titanicDF.columns[1:], outputCol="features")
 dtc = DecisionTreeClassifier(featuresCol="features", labelCol="Survived")
@@ -173,7 +173,7 @@ with mlflow.start_run(run_name="final_model") as run:
 # MAGIC 
 # MAGIC #### Create a new registered model using the API
 # MAGIC 
-# MAGIC The following cells use the `mlflow.register_model()` function to create a new registered model whose name begins with the string `Titanic-DecisionTree`. This also creates a new model version (e.g., `Version 1` of `Titanic-Model`).
+# MAGIC The following cells use the `mlflow.register_model()` function to create a new registered model whose name begins with the string `Titanic-Model`. This also creates a new model version (e.g., `Version 1` of `Titanic-Model`).
 
 # COMMAND ----------
 
