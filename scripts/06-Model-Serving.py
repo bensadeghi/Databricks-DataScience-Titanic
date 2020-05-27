@@ -79,7 +79,7 @@ modelPipeline = mlflow.pyfunc.load_model(modelURI).spark_model
 
 titanicDF = spark.read.table("titanic_clean")
 
-trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=1)
+trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=10)
 
 # COMMAND ----------
 
@@ -140,6 +140,7 @@ for s in spark.streams.active:
 # MAGIC ## Additional Resources
 # MAGIC - [MLflow Guide](https://docs.microsoft.com/en-us/azure/databricks/applications/mlflow/)
 # MAGIC - [Track models metrics with MLflow and Azure Machine Learning](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-use-mlflow)
+# MAGIC - [Deploy a `python_function` model on Microsoft Azure ML](https://www.mlflow.org/docs/latest/models.html#deploy-a-python-function-model-on-microsoft-azure-ml)
 # MAGIC - [Notebook: Deploy Model to Azure Container Instance](https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/azure-databricks/amlsdk/deploy-to-aci-04.ipynb)
 # MAGIC - [mlflow.azureml API](https://www.mlflow.org/docs/latest/python_api/mlflow.azureml.html)
 
