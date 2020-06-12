@@ -25,10 +25,10 @@
 # MAGIC Please ensure you have a cluster with the following configuration:
 # MAGIC 
 # MAGIC Cluster Mode: Standard  
-# MAGIC Databricks Runtime: 5.4+  
-# MAGIC NO autoscaling  
-# MAGIC Standard VMs (DS3 v2)  
-# MAGIC 1 worker node
+# MAGIC Databricks Runtime: 5.5+  
+# MAGIC Autoscaling Disabled  
+# MAGIC Standard VMs (DS3_v2)  
+# MAGIC 1 Worker Node
 # MAGIC 
 # MAGIC Install **MLflow** library on the cluster via PyPI
 
@@ -67,7 +67,7 @@ dbutils.fs.help()
 # COMMAND ----------
 
 # Create a new directory within DBFS
-dataDir = 'dbfs:/' + userName + '/titanic_data'
+dataDir = 'dbfs:/Users/' + userName + '/titanic_data'
 dbutils.fs.mkdirs(dataDir)
 
 # Copy data from Spark driver to DBFS
@@ -190,7 +190,6 @@ titanicDF.write.mode("overwrite").format("delta").saveAsTable("titanic")
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC 
 # MAGIC SELECT * FROM titanic LIMIT 10
 
 # COMMAND ----------
@@ -258,7 +257,7 @@ display(titanicDF.groupBy('Survived', 'Sex').count())
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC &copy; 2019 Databricks, Inc. All rights reserved.<br/>
+# MAGIC &copy; 2020 Databricks, Inc. All rights reserved.<br/>
 # MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
 # MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
