@@ -133,8 +133,6 @@ display(testPredictionDF)
 
 # MAGIC %md-sandbox
 # MAGIC Define the evaluator with the prediction column, label column, and accuracy metric.
-# MAGIC 
-# MAGIC We'll explore various model parameters later.
 
 # COMMAND ----------
 
@@ -145,7 +143,7 @@ evaluator = MulticlassClassificationEvaluator(predictionCol="prediction", labelC
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Evaluate `testPredictionDF` using the `.evaluator()` method.
+# MAGIC Evaluate `testPredictionDF` using the `.evaluator()` method, and track the accuracy metric with MLflow
 
 # COMMAND ----------
 
@@ -263,7 +261,7 @@ mlflow.end_run()
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC &copy; 2019 Databricks, Inc. All rights reserved.<br/>
+# MAGIC &copy; 2020 Databricks, Inc. All rights reserved.<br/>
 # MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
 # MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
