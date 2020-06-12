@@ -17,12 +17,7 @@
 # COMMAND ----------
 
 titanicDF = spark.read.table("titanic").cache()
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC 
-# MAGIC SELECT COUNT(*) FROM titanic
+titanicDF.count()
 
 # COMMAND ----------
 
@@ -44,7 +39,8 @@ display(titanicDF)
 
 titanicCleanDF = titanicDF \
                  .withColumnRenamed("Pclass", "PassengerClass") \
-                 .withColumnRenamed("SibSp", "SiblingsSpouses")
+                 .withColumnRenamed("SibSp", "SiblingsSpouses") \
+                 .withColumnRenamed("Parch", "ParentsChildren")
 
 # COMMAND ----------
 
@@ -109,7 +105,7 @@ display(titanicCleanDF)
 # COMMAND ----------
 
 # Drop old Sex and Embarked columns
-titanicCleanDF = titanicCleanDF.drop("Sex").drop("Embarked")
+titanicCleanDF = titanicCleanDF.drop("Sex", "Embarked")
 
 # COMMAND ----------
 
@@ -138,7 +134,7 @@ titanicCleanDF.write.mode("overwrite").format("delta").saveAsTable("titanic_clea
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC &copy; 2019 Databricks, Inc. All rights reserved.<br/>
+# MAGIC &copy; 2020 Databricks, Inc. All rights reserved.<br/>
 # MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
 # MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
