@@ -9,7 +9,7 @@
 # MAGIC * Define hyperparameters and motivate their role in machine learning
 # MAGIC * Tune hyperparameters using grid search
 # MAGIC * Validate model performance using cross-validation
-# MAGIC * Save a trained model
+# MAGIC * Register a trained model in MLflow
 
 # COMMAND ----------
 
@@ -38,8 +38,6 @@
 # MAGIC Hyperparameter tuning is the process of of choosing the optimal hyperparameters for a machine learning algorithm.  Each algorithm has different hyperparameters to tune.  You can explore these hyperparameters by using the `.explainParams()` method on a model.
 # MAGIC 
 # MAGIC **Grid search** is the process of exhaustively trying every combination of hyperparameters.  It takes all of the values we want to test and combines them in every possible way so that we test them using cross-validation.
-# MAGIC 
-# MAGIC Start by performing a train/test split on the Boston dataset and building a pipeline for linear regression.
 # MAGIC 
 # MAGIC <img alt="Side Note" title="Side Note" style="vertical-align: text-bottom; position: relative; height:1.75em; top:0.05em; transform:rotate(15deg)" src="https://files.training.databricks.com/static/images/icon-note.webp"/> See <a href="https://en.wikipedia.org/wiki/Hyperparameter_optimization" target="_blank">the Wikipedia article on hyperparameter optimization</a> for more information.
 
@@ -71,7 +69,7 @@ from pyspark.ml.tuning import ParamGridBuilder
 
 paramGrid = (ParamGridBuilder()
   .addGrid(dtc.maxDepth, [2, 3, 4, 5, 6])
-  .addGrid(dtc.maxBins, [10, 25, 50, 75])
+  .addGrid(dtc.maxBins,  [16, 32, 48, 64])
   .build()
 )
 
@@ -119,7 +117,7 @@ cvModel = cv.fit(trainDF)
 
 # MAGIC %md
 # MAGIC ### Take a look at the scores from the different experiments
-# MAGIC This can be done via the [MLflow](https://databricks.com/blog/2018/06/05/introducing-mlflow-an-open-source-machine-learning-platform.html) sidebar/UI<br><br>
+# MAGIC This can be done via the [MLflow](https://databricks.com/blog/2018/06/05/introducing-mlflow-an-open-source-machine-learning-platform.html) sidebar or UI<br><br>
 # MAGIC ![x](https://docs.databricks.com/_images/mlflow-notebook-experiments.gif)
 
 # COMMAND ----------
@@ -186,38 +184,14 @@ modelDetails = mlflow.register_model(model_uri=modelURI, name=modelName)
 
 # COMMAND ----------
 
-# MAGIC %md After creating a model version, it may take a short period of time to become ready. Certain operations, such as model stage transitions, require the model to be in the `READY` state. Other operations, such as adding a description or fetching model details, can be performed before the model version is ready (e.g., while it is in the `PENDING_REGISTRATION` state).
-# MAGIC 
-# MAGIC The following cell uses the `MlflowClient.get_model_version()` function to wait until the model is ready.
-
-# COMMAND ----------
-
-import time
-from mlflow.entities.model_registry.model_version_status import ModelVersionStatus
-from mlflow.tracking.client import MlflowClient
-client = MlflowClient()
-
-def wait_until_ready(model_name, model_version):
-  for _ in range(10):
-    model_version_details = client.get_model_version(
-      name=model_name,
-      version=model_version,
-    )
-    status = ModelVersionStatus.from_string(model_version_details.status)
-    print("Model status: %s" % ModelVersionStatus.to_string(status))
-    if status == ModelVersionStatus.READY:
-      break
-    time.sleep(1)
-  
-wait_until_ready(modelDetails.name, modelDetails.version)
-
-# COMMAND ----------
-
 # MAGIC %md ### Perform a model stage transition
 # MAGIC 
 # MAGIC The MLflow Model Registry defines several model stages: **None**, **Staging**, **Production**, and **Archived**. Each stage has a unique meaning. For example, **Staging** is meant for model testing, while **Production** is for models that have completed the testing or review processes and have been deployed to applications.
 
 # COMMAND ----------
+
+from mlflow.tracking.client import MlflowClient
+client = MlflowClient()
 
 client.transition_model_version_stage(
   name = modelDetails.name,
@@ -245,7 +219,7 @@ print("The latest production version of the model '%s' is '%s'." % (modelName, l
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC &copy; 2019 Databricks, Inc. All rights reserved.<br/>
+# MAGIC &copy; 2020 Databricks, Inc. All rights reserved.<br/>
 # MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
 # MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
