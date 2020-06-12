@@ -19,7 +19,7 @@
 # MAGIC 
 # MAGIC [Machine learning](https://en.wikipedia.org/wiki/Machine_learning) refers to a diverse set of tools for understanding data.  More technically, **machine learning is the process of _learning from data_ without being _explicitly programmed_**.  Let's unpack what that means.
 # MAGIC 
-# MAGIC <img src="https://raw.githubusercontent.com/bensadeghi/Databricks-DataScience-Titanic/master/img/programming_vs_ML.jpeg" style="height: 250px;"/>
+# MAGIC <img src="https://raw.githubusercontent.com/bensadeghi/Databricks-DataScience-Titanic/master/img/programming_vs_ML.jpeg" style="height: 250px; margin: 20px"/>
 # MAGIC <br>Above image courtesy of François Chollet
 # MAGIC   
 # MAGIC Take the Titanic dataset for example.  The dataset consists of the passanger details, such as sex, age, and cabin class, along with their survival status.  Here, the survival value is the _output variable_, also known as the _label_.  The other variables are known as _input variables_ or _features_.
@@ -63,7 +63,7 @@
 # MAGIC 
 # MAGIC Generally speaking, **a supervised model learning a quantitative variable is called regression and a model learning a qualitative variable is called classification.**
 # MAGIC 
-# MAGIC <div><img src="https://files.training.databricks.com/images/eLearning/ML-Part-1/classification_v_regression.jpg" style="height: 400px;"/>
+# MAGIC <div><img src="https://files.training.databricks.com/images/eLearning/ML-Part-1/classification_v_regression.jpg" style="height: 400px; margin: 20px"/>
 
 # COMMAND ----------
 
@@ -148,7 +148,7 @@
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC <div><img src="https://files.training.databricks.com/images/eLearning/ML-Part-4/mlflow-tracking.png" style="height: 250px;"/></div>
+# MAGIC <div><img src="https://files.training.databricks.com/images/eLearning/ML-Part-4/mlflow-tracking.png" style="height: 250px; margin: 20px"/></div>
 
 # COMMAND ----------
 
