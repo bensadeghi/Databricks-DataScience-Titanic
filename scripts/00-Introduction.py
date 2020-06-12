@@ -1,7 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # Titanic: Machine Learning from Disaster (Kaggle)
-# MAGIC ### A walk-through of data science basics using PySpark and the Titanic dataset
+# MAGIC ### A walk-through of data science basics using PySpark, MLflow and the Titanic dataset
 # MAGIC 
 # MAGIC <a href="https://www.kaggle.com/c/titanic/">Titanic competition on Kaggle</a>
 
@@ -23,6 +23,7 @@
 # MAGIC   - ML Workflow
 # MAGIC   - Training Models
 # MAGIC   - Tuning Model Parameters
+# MAGIC   - Model Registration
 # MAGIC * Deployment
 # MAGIC   - Overview of Model Serving Options
 # MAGIC   - Serving in Batch and Streams
@@ -44,7 +45,7 @@
 # MAGIC 
 # MAGIC Azure Databricks is Unified Analytics Platform for Data Engineers, Data Scientists and Analysis  
 # MAGIC 
-# MAGIC ![UAP](https://databricks.com/wp-content/themes/databricks/assets/images/uap/marchitecture.png)
+# MAGIC <img src="https://raw.githubusercontent.com/bensadeghi/Databricks-DataScience-Titanic/master/img/UDAP.PNG" width="700" />
 # MAGIC 
 # MAGIC ## Databricks Terminology
 # MAGIC 
@@ -62,7 +63,7 @@
 # MAGIC -   ****Libraries****
 # MAGIC     -   Libraries are packages or modules that provide additional functionality that you need to solve your business problems. These may be custom written Scala or Java jars; python eggs or custom written packages. You can write and upload these manually or you may install them directly via package management utilities like pypi or maven.
 # MAGIC -   ****Tables****
-# MAGIC     -   Tables are structured data that you and your team will use for analysis. Tables can exist in several places. Tables can be stored on Azure Blob or Azure Data Lake Store (ADLS), they can be stored on the cluster that you're currently using, or they can be cached in memory. [For more about tables see the documentation](https://docs.cloud.databricks.com/docs/latest/databricks_guide/index.html#02%20Product%20Overview/07%20Tables.html).
+# MAGIC     -   Tables are structured data that you and your team will use for analysis. Tables can exist in several places. Tables can be stored on Azure Blob or Azure Data Lake Store (ADLS), they can be stored on the cluster that you're currently using, or they can be cached in memory. [For more about tables see the documentation](https://docs.microsoft.com/en-us/azure/databricks/data/tables).
 # MAGIC -   ****Clusters****
 # MAGIC     -   Clusters are groups of computers that you treat as a single computer. In Databricks, this means that you can effectively treat 20 computers as you might treat one computer. Clusters allow you to execute code from ****notebooks**** or ****libraries**** on set of data. That data may be raw data located on Blob/ADLS or structured data that you uploaded as a ****table**** to the cluster you are working on. 
 # MAGIC     - It is important to note that clusters have access controls to control who has access to each cluster.
@@ -218,7 +219,7 @@
 # MAGIC ![img](https://training.databricks.com/databricks_guide/gentle_introduction/help_menu.png)
 # MAGIC 
 # MAGIC -   ****The Azure Databricks Documentation****
-# MAGIC     -   [The Azure Databricks documentation](https://docs.azuredatabricks.net/index.html) is the definitive reference for you and your team once you've become accustomed to using and leveraging Apache Spark. It allows for quick reference of common Azure Databricks and Spark APIs with snippets of sample code.
+# MAGIC     -   [The Azure Databricks documentation](https://docs.microsoft.com/en-us/azure/azure-databricks/) is the definitive reference for you and your team once you've become accustomed to using and leveraging Apache Spark. It allows for quick reference of common Azure Databricks and Spark APIs with snippets of sample code.
 # MAGIC     -   The Guide also includes a series of tutorials (including this one!) that provide a more guided introduction to a given topic.
 # MAGIC -   ****The Apache Spark Documentation****
 # MAGIC     -   [The Apache Spark open source documentation](http://spark.apache.org/docs/latest/sql-programming-guide.html) is also made available for quick and simple search if you need to dive deeper into some of the internals of Apache Spark.
@@ -233,7 +234,7 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC &copy; 2019 Databricks, Inc. All rights reserved.<br/>
+# MAGIC &copy; 2020 Databricks, Inc. All rights reserved.<br/>
 # MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
 # MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
