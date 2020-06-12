@@ -26,11 +26,10 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC 
-# MAGIC By using Databricks to create your models (or, alternatively, some of the other solutions mentioned in the previous section of our workshop), you can then choose your serving layer. Whether that's **batch** (where you scroll data on a regular interval), **streaming** (scoring data non-stop), or via a **web service** (where you make "random" calls to be scored), you can achieve the first 2 options using Databricks directly (or, for more complex pipelines, using scheduling via Azure Data Factory), while the latter can easily be covered by integrating Databricks with [Azure Machine Learning Service](https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-use-mlflow), for an easy way to deploy to an auto-scalable, containerized API.
+# MAGIC By using Databricks to create your models (or, alternatively, some of the other solutions mentioned in the previous section of our workshop), you can then choose your serving layer. Whether that's **batch** (where you scroll data on a regular interval), **streaming** (scoring data non-stop), or via a **web service** (where you make "random" calls to be scored), you can achieve the first 2 options using Databricks directly (or, for more complex pipelines, using scheduling via [Azure Data Factory](https://docs.microsoft.com/en-us/azure/data-factory/solution-template-databricks-notebook)), while the latter can easily be covered by integrating Databricks with [Azure Machine Learning Service](https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-use-mlflow), for an easy way to deploy to an auto-scalable, containerized API.
 # MAGIC 
 # MAGIC See Azure Reference Architecture below:
-# MAGIC ![x](https://github.com/bensadeghi/Databricks-DataScience-Titanic/raw/master/img/azure_reference_architecture.png)
+# MAGIC ![](https://github.com/bensadeghi/Databricks-DataScience-Titanic/raw/master/img/azure_reference_architecture.PNG)
 
 # COMMAND ----------
 
@@ -48,6 +47,7 @@ client = MlflowClient()
 modelName = "Titanic-Model__" + userName
 latestVersionInfo = client.get_latest_versions(modelName, stages=["Production"])
 latestVersion = latestVersionInfo[0].version
+
 print("The latest production version of the model '%s' is '%s'." % (modelName, latestVersion))
 
 # COMMAND ----------
@@ -60,10 +60,10 @@ print("The latest production version of the model '%s' is '%s'." % (modelName, l
 
 import mlflow.pyfunc
 
-modelURI = "models:/{model_name}/production".format(model_name=modelName)
+modelURI = latestVersionInfo[0].source
+modelPipeline = mlflow.pyfunc.load_model(modelURI).spark_model
 
 print("Loading registered model version from URI: '{model_uri}'".format(model_uri=modelURI))
-modelPipeline = mlflow.pyfunc.load_model(modelURI).spark_model
 
 # COMMAND ----------
 
@@ -79,13 +79,11 @@ modelPipeline = mlflow.pyfunc.load_model(modelURI).spark_model
 
 titanicDF = spark.read.table("titanic_clean")
 
-trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=10)
-
 # COMMAND ----------
 
 # Make predictions in batch
 
-predictions = modelPipeline.transform(testDF)
+predictions = modelPipeline.transform(titanicDF)
 
 display(predictions)
 
@@ -125,21 +123,19 @@ for s in spark.streams.active:
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC #### [Track model metrics and deploy ML models with MLflow and Azure Machine Learning](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-use-mlflow#deploy-mlflow-models-as-a-web-service)
+# MAGIC * Track and log experiment metrics and artifacts in your Azure Machine Learning workspace. If you already use MLflow Tracking for your experiments, the workspace provides a centralized, secure, and scalable location to store training metrics and models.
+# MAGIC * Deploy your MLflow experiments as an Azure Machine Learning web service. By deploying as a web service, you can apply the Azure Machine Learning monitoring and data drift detection functionalities to your production models.
+# MAGIC * Azure deployment infrastructure options:
+# MAGIC   * Azure Container Instance - suitable choice for a quick dev-test deployment
+# MAGIC   * Azure Kubernetes Service - suitable for scalable production deployments
 # MAGIC 
-# MAGIC **Azure Machine Learning** provides the following [MLOps capabilities](https://docs.microsoft.com/en-us/azure/machine-learning/concept-model-management-and-deployment):<br><br>
-# MAGIC - Deploy ML projects from anywhere
-# MAGIC - Monitor ML applications for operational and ML related issues - compare model inputs between training and inference, explore model-specific metrics and provide monitoring and alerts on your ML infrastructure.
-# MAGIC - Capture the data required for establishing an end to end audit trail of the ML lifecycle, including who is publishing models, why changes are being made, and when models were deployed or used in production.
-# MAGIC - Automate the end to end ML lifecycle with Azure Machine Learning and Azure DevOps to frequently update models, test new models, and continuously roll out new ML models alongside your other applications and services.
-# MAGIC 
-# MAGIC ![x](https://github.com/bensadeghi/Databricks-DataScience-Titanic/raw/master/img/azure_devops_ml.png)
+# MAGIC ![Workspace](https://github.com/parasharshah/automl-handson/raw/master/image4deploy.JPG)
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ## Additional Resources
-# MAGIC - [MLflow Guide](https://docs.microsoft.com/en-us/azure/databricks/applications/mlflow/)
-# MAGIC - [Track models metrics with MLflow and Azure Machine Learning](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-use-mlflow)
 # MAGIC - [Deploy a `python_function` model on Microsoft Azure ML](https://www.mlflow.org/docs/latest/models.html#deploy-a-python-function-model-on-microsoft-azure-ml)
 # MAGIC - [Notebook: Deploy Model to Azure Container Instance](https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/azure-databricks/amlsdk/deploy-to-aci-04.ipynb)
 # MAGIC - [mlflow.azureml API](https://www.mlflow.org/docs/latest/python_api/mlflow.azureml.html)
@@ -154,7 +150,7 @@ for s in spark.streams.active:
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC &copy; 2019 Databricks, Inc. All rights reserved.<br/>
+# MAGIC &copy; 2020 Databricks, Inc. All rights reserved.<br/>
 # MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="http://www.apache.org/">Apache Software Foundation</a>.<br/>
 # MAGIC <br/>
 # MAGIC <a href="https://databricks.com/privacy-policy">Privacy Policy</a> | <a href="https://databricks.com/terms-of-use">Terms of Use</a> | <a href="http://help.databricks.com/">Support</a>
