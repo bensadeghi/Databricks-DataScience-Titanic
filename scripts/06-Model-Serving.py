@@ -130,7 +130,7 @@ for s in spark.streams.active:
 # MAGIC   * Azure Container Instance - suitable choice for a quick dev-test deployment
 # MAGIC   * Azure Kubernetes Service - suitable for scalable production deployments
 # MAGIC 
-# MAGIC ![Workspace](https://github.com/parasharshah/automl-handson/raw/master/image4deploy.JPG)
+# MAGIC ![Azure ML Arch](https://raw.githubusercontent.com/bensadeghi/Databricks-DataScience-Titanic/master/img/azure_ml_arch.JPG)
 
 # COMMAND ----------
 
