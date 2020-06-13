@@ -175,12 +175,15 @@ with mlflow.start_run(run_name="final_model") as run:
 
 # COMMAND ----------
 
+import time
+
 modelName = "Titanic-Model__" + userName
 
 artifactPath = "model"
 modelURI = "runs:/{run_id}/{artifact_path}".format(run_id=runID, artifact_path=artifactPath)
 
 modelDetails = mlflow.register_model(model_uri=modelURI, name=modelName)
+time.sleep(5)
 
 # COMMAND ----------
 
