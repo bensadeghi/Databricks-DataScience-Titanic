@@ -1,34 +1,23 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC 
-# MAGIC ## Model Serving Options
+# MAGIC # Model Serving
 # MAGIC 
-# MAGIC When we move to talking about actually operationalizing the machine learning models we've build so far is where the discussion becomes tricky. Many organizations have not yet reached this step, as it can become quite complex to get here, and this part is not any easier either.
+# MAGIC When we move to talking about actually operationalizing the machine learning models we've built so far, this is where the discussion becomes tricky. Many organizations have yet to reach this step, as it can become quite complex to get here. Depending on the use-case at hand, there are several options for deploying a model and using it to make predictions on new data.
+# MAGIC 
+# MAGIC ### Agenda:
+# MAGIC * Review model serving options
+# MAGIC * Load a registered production model
+# MAGIC * Perform batch scoring
+# MAGIC * Perform stream scoring
+# MAGIC * Discuss serving model as a web service
 
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC By using Databricks to create your models, you can then choose your serving layer. Whether that's **batch** (where you score data on a regular interval), **streaming** (scoring non-stop data), or via a **web service** (where you make "random" calls to be scored), you can achieve the first 2 options using Databricks directly (or, for more complex pipelines, using scheduling via [Azure Data Factory](https://docs.microsoft.com/en-us/azure/data-factory/solution-template-databricks-notebook)), while the latter can easily be covered by integrating Databricks with [Azure Machine Learning Service](https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-use-mlflow), for an easy way to deploy to an auto-scalable, containerized API.
 # MAGIC 
-# MAGIC When we talk about open source deployment of ML models, the first to stand out is [Docker](https://opensource.com/resources/what-docker). Docker is a tool designed to make it easier to create, deploy, and run applications by using containers. Containers allow a developer to package up an application with all of the parts it needs, such as libraries and other dependencies, and ship it all out as one package. By doing so, thanks to the container, the developer can rest assured that the application will run on any other Linux machine regardless of any customized settings that machine might have that could differ from the machine used for writing and testing the code.
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC 
-# MAGIC As the extent of the scope of Docker containers grew, so did the complexity of their deployment. As such, Kubernetes quickly came into the light of many organizations. [Kubernetes](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/) is a portable, extensible open-source platform for managing containerized workloads and services, that facilitates both declarative configuration and automation. It has a large, rapidly growing ecosystem. Kubernetes services, support, and tools are widely available.
-
-# COMMAND ----------
-
-# MAGIC %md 
-# MAGIC 
-# MAGIC Using these 2 solutions, some organizations do realise their deployments, however, with a lengthy development cycle, and a rigourous maintainence team behind it. However, to save some of the headaches, make the process smoother for more users (rather than just expert engineering teams), and in some cases save on TCO too, you also have alternatives in Azure.
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC By using Databricks to create your models (or, alternatively, some of the other solutions mentioned in the previous section of our workshop), you can then choose your serving layer. Whether that's **batch** (where you scroll data on a regular interval), **streaming** (scoring data non-stop), or via a **web service** (where you make "random" calls to be scored), you can achieve the first 2 options using Databricks directly (or, for more complex pipelines, using scheduling via [Azure Data Factory](https://docs.microsoft.com/en-us/azure/data-factory/solution-template-databricks-notebook)), while the latter can easily be covered by integrating Databricks with [Azure Machine Learning Service](https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-use-mlflow), for an easy way to deploy to an auto-scalable, containerized API.
-# MAGIC 
-# MAGIC See Azure Reference Architecture below:
+# MAGIC See **Azure Reference Architecture** below:
 # MAGIC ![](https://github.com/bensadeghi/Databricks-DataScience-Titanic/raw/master/img/azure_reference_architecture.PNG)
 
 # COMMAND ----------
@@ -52,8 +41,7 @@ print("The latest production version of the model '%s' is '%s'." % (modelName, l
 
 # COMMAND ----------
 
-# MAGIC %md You can also load a specific model stage. The following cell loads the `Production` stage of the model.
-# MAGIC 
+# MAGIC %md
 # MAGIC The following cell uses the `mlflow.pyfunc.load_model()` API to load the latest version of production stage model as a generic Python function.
 
 # COMMAND ----------
@@ -136,8 +124,8 @@ for s in spark.streams.active:
 
 # MAGIC %md
 # MAGIC ## Additional Resources
-# MAGIC - [Deploy a `python_function` model on Microsoft Azure ML](https://www.mlflow.org/docs/latest/models.html#deploy-a-python-function-model-on-microsoft-azure-ml)
 # MAGIC - [Notebook: Deploy Model to Azure Container Instance](https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/azure-databricks/amlsdk/deploy-to-aci-04.ipynb)
+# MAGIC - [Deploy a `python_function` model on Microsoft Azure ML](https://www.mlflow.org/docs/latest/models.html#deploy-a-python-function-model-on-microsoft-azure-ml)
 # MAGIC - [mlflow.azureml API](https://www.mlflow.org/docs/latest/python_api/mlflow.azureml.html)
 
 # COMMAND ----------
