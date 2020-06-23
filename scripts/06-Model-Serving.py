@@ -42,7 +42,7 @@ print("The latest production version of the model '%s' is '%s'." % (modelName, l
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC The following cell uses the `mlflow.pyfunc.load_model()` API to load the latest version of production stage model as a generic Python function.
+# MAGIC The following cell uses the `mlflow.spark.load_model()` API to load the latest version of production stage model.
 
 # COMMAND ----------
 
