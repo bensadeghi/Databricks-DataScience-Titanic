@@ -46,10 +46,10 @@ print("The latest production version of the model '%s' is '%s'." % (modelName, l
 
 # COMMAND ----------
 
-import mlflow.pyfunc
+import mlflow.spark
 
 modelURI = latestVersionInfo[0].source
-modelPipeline = mlflow.pyfunc.load_model(modelURI).spark_model
+modelPipeline = mlflow.spark.load_model(modelURI)
 
 print("Loading registered model version from URI: '{model_uri}'".format(model_uri=modelURI))
 
