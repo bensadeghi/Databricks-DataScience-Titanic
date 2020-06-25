@@ -45,14 +45,14 @@ modelName = "Titanic-Model__" + userName
 models = client.search_model_versions("name='{}'".format(modelName))
 
 # loop over registered models
-for i in range(len(models)):
+for model in models:
   try:
     # set model stage to Archive
-    client.transition_model_version_stage(name=modelName, version=models[i].version, stage='Archived')
+    client.transition_model_version_stage(name=modelName, version=model.version, stage='Archived')
   except:
     pass
   # delete version of model
-  client.delete_model_version(modelName, models[i].version)
+  client.delete_model_version(modelName, model.version)
 
 # delete model
 client.delete_registered_model(modelName)
