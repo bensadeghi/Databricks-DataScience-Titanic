@@ -43,18 +43,15 @@
 
 # COMMAND ----------
 
-from pyspark.ml import Pipeline
 from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.classification import DecisionTreeClassifier
 
 titanicDF = spark.read.table("titanic_clean").cache()
-
 trainDF, testDF = titanicDF.randomSplit([0.8, 0.2], seed=10)
 
 assembler = VectorAssembler(inputCols=titanicDF.columns[1:], outputCol="features")
-dtc = DecisionTreeClassifier(featuresCol="features", labelCol="Survived")
 
-pipeline = Pipeline(stages = [assembler, dtc])
+dtc = DecisionTreeClassifier(featuresCol="features", labelCol="Survived")
 
 # COMMAND ----------
 
@@ -95,9 +92,9 @@ from pyspark.ml.tuning import CrossValidator
 evaluator = MulticlassClassificationEvaluator(predictionCol="prediction", labelCol="Survived", metricName="accuracy")
 
 cv = CrossValidator(
-  estimator = pipeline,             # Estimator (individual model or pipeline)
+  estimator = dtc,                  # Estimator (individual model or pipeline)
   estimatorParamMaps = paramGrid,   # Grid of parameters to try (grid search)
-  evaluator = evaluator,              # Evaluator
+  evaluator = evaluator,            # Evaluator
   numFolds = 5,                     # Set k to 5
   seed = 10                         # Seed to sure our results are the same if ran again
 )
@@ -105,13 +102,17 @@ cv = CrossValidator(
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC Fit the `CrossValidator()`
+# MAGIC Add `VectorAssembler()` and `CrossValidator()` to a `Pipeline()` and fit it to the training dataset. 
 # MAGIC 
 # MAGIC <img alt="Side Note" title="Side Note" style="vertical-align: text-bottom; position: relative; height:1.75em; top:0.05em; transform:rotate(15deg)" src="https://files.training.databricks.com/static/images/icon-note.webp"/> This will train a large number of models.  If your cluster size is too small, it could take a while.
 
 # COMMAND ----------
 
-cvModel = cv.fit(trainDF)
+from pyspark.ml import Pipeline
+
+pipeline = Pipeline(stages = [assembler, cv])
+
+cvModel = pipeline.fit(trainDF)
 
 # COMMAND ----------
 
@@ -127,7 +128,7 @@ cvModel = cv.fit(trainDF)
 
 # COMMAND ----------
 
-bestModel = cvModel.bestModel.stages[-1]
+bestModel = cvModel.stages[-1].bestModel
 print(bestModel)
 
 # get the best value for maxDepth parameter
