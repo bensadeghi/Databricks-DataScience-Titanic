@@ -225,7 +225,11 @@ display(dtcModel)
 
 # COMMAND ----------
 
-list(zip(assembler.getInputCols(), dtcModel.featureImportances))
+# zip the list of features with their scores
+scores = zip(assembler.getInputCols(), dtcModel.featureImportances)
+
+# and pretty print theem
+for x in scores: print("%-15s = %s" % x)
 
 # COMMAND ----------
 
