@@ -124,9 +124,9 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Tracking Experiments with [MLflow](https://mlflow.org/)
+# MAGIC ### Tracking Experiments and Registering Models with [MLflow](https://mlflow.org/)
 # MAGIC 
-# MAGIC MLflow Tracking is...<br><br>
+# MAGIC **MLflow Tracking** is...<br><br>
 # MAGIC 
 # MAGIC * a logging API specific for machine learning 
 # MAGIC * agnostic to libraries and environments that do the training
@@ -143,12 +143,22 @@
 # MAGIC 
 # MAGIC Experiments can be tracked using libraries in Python, R, and Java as well as by using the CLI and REST calls.
 # MAGIC 
+# MAGIC The **MLflow Model Registry** allows you to... <br><br>
+# MAGIC 
+# MAGIC * Discover registered models, experiment runs, and associated code with a registered model
+# MAGIC * Transition models to deployment stages
+# MAGIC * Deploy different versions of a registered model in different stages
+# MAGIC * Archive older models for posterity and provenance
+# MAGIC * Peruse model activities and annotations throughout model’s lifecycle
+# MAGIC * Control granular access and permission for model registrations, transitions or modifications
+# MAGIC 
+# MAGIC 
 # MAGIC See [MLflow Guide](https://docs.microsoft.com/en-us/azure/databricks/applications/mlflow/)
 
 # COMMAND ----------
 
 # MAGIC %md-sandbox
-# MAGIC <div><img src="https://files.training.databricks.com/images/eLearning/ML-Part-4/mlflow-tracking.png" style="height: 250px; margin: 20px"/></div>
+# MAGIC <div><img src="https://databricks.com/wp-content/uploads/2020/04/databricks-adds-access-control-to-mlflow-model-registry_01.jpg" style="height: 450px; margin: 20px"/></div>
 
 # COMMAND ----------
 
