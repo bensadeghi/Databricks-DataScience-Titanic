@@ -119,7 +119,7 @@ cvModel = pipeline.fit(trainDF)
 # MAGIC %md
 # MAGIC ### Take a look at the scores from the different experiments
 # MAGIC This can be done via the [MLflow](https://databricks.com/blog/2018/06/05/introducing-mlflow-an-open-source-machine-learning-platform.html) sidebar or UI<br><br>
-# MAGIC ![x](https://docs.databricks.com/_images/mlflow-notebook-experiments.gif)
+# MAGIC ![x](https://docs.databricks.com/_images/mlflow-notebook-revision.png)
 
 # COMMAND ----------
 
